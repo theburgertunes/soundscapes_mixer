@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background-image: url("https://yourhosting.com/path/to/your/background-image.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    #mixer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 10px;
+    }
+
+    .channel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  </style>
+  <title>Soundscapes Mixer</title>
+</head>
+<body>
+  <div id="mixer">
+    <div class="title">Your Soundscapes Mixer</div>
+
+    <!-- Add channel divs and replace CHANNEL_NAME with custom names for each channel -->
+    <div class="channel">
+      <div class="channel-name">CHANNEL_NAME</div>
+      <input type="range" class="volume-control" min="0" max="1" step="0.01" value="0.5">
+    </div>
+    <div class="channel">
+      <div class="channel-name">CHANNEL_NAME</div>
+      <input type="range" class="volume-control" min="0" max="1" step="0.01" value="0.5">
+    </div>
+    <div class="channel">
+      <div class="channel-name">CHANNEL_NAME</div>
+      <input type="range" class="volume-control" min="0" max="1" step="0.01" value="0.5">
+    </div>
+    <div class="channel">
+      <div class="channel-name">CHANNEL_NAME</div>
+      <input type="range" class="volume-control" min="0" max="1" step="0.01" value="0.5">
+    </div>
+
+    <!-- Add play, pause, and timeline bar elements -->
+    <div class="channel">
+      <button id="playButton">Play</button>
+      <button id="pauseButton">Pause</button>
+      <br>
+      <label for="timeline">Timeline</label><br>
+      <input type="range" id="timeline" name="timeline" min="0" max="100" step="0.1">
+    </div>
+  </div>
+
+  <script>
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    function createGainNode() {
+      const gainNode = audioContext.createGain();
+      gainNode.gain.value = 0.5;
+      return gainNode;
+    }
+
+    function loadAudioFile(url) {
+      return fetch(url)
+        .then(response => response.arrayBuffer())
+        .then(data => audioContext.decodeAudioData(data));
+    }
+
+    function connectNodes(source, gainNode, destination) {
+      source.connect(gainNode);
+      gainNode.connect(destination);
+    }
+
+    function createSourceNode(buffer) {
+      const source = audioContext.createBufferSource();
+      source.buffer = buffer;
+     
